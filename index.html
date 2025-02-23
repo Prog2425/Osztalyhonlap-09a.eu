@@ -1,0 +1,151 @@
+<script>import React, { useState } from 'react';
+
+    const EmailForm = () => {
+      const [message, setMessage] = useState('');
+      const [status, setStatus] = useState('');
+    
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        setStatus('Küldés folyamatban...');
+        
+        try {
+          const response = await fetch('/api/send-email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              message: message,
+              // Az email címet itt állítsd be
+              to: 'meszarosakos064@gmail.com'
+            }),
+          });
+    
+          if (response.ok) {
+            setStatus('Sikeres küldés!');
+            setMessage('');
+          } else {
+            setStatus('Hiba történt a küldés során.');
+          }
+        } catch (error) {
+          setStatus('Hiba történt a küldés során.');
+          console.error('Error:', error);
+        }
+      };
+    
+      return (
+        <div className="max-w-xl mx-auto p-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded"
+              placeholder="Írj valamit..."
+            />
+            <button 
+              type="submit"
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            >
+              Küldés
+            </button>
+            {status && (
+              <p className="mt-2 text-sm text-gray-600">{status}</p>
+            )}
+          </form>
+        </div>
+      );
+    };
+    
+    export default EmailForm;
+    
+    // backend/server.js
+    const express = require('express');
+    const nodemailer = require('nodemailer');
+    require('dotenv').config();
+    
+    const app = express();
+    app.use(express.json());
+    
+    // Email küldő konfigurálása
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',  // vagy más email szolgáltató
+      auth: {
+        user: process.env.NAME,
+        pass: process.env.PASS  // App jelszó Gmail esetén
+      }
+    });
+    
+    app.post('/api/send-email', async (req, res) => {
+      const { message, to } = req.body;
+    
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: to,
+        subject: 'Új üzenet a weboldalról',
+        text: message
+      };
+    
+      try {
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ message: 'Email sikeresen elküldve' });
+      } catch (error) {
+        console.error('Email küldési hiba:', error);
+        res.status(500).json({ error: 'Hiba történt az email küldése során' });
+      }
+    });
+    
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+    
+    // .env file
+    EMAIL_USER=meszarosakos064
+    EMAIL_PASSWORD=Paralia2022
+    PORT=3000</script>
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9/A</title>
+    <link rel="stylesheet" href="bootstrap.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center text-success mt-3">Az Osztályunk</h1>
+        <div class="row">
+            <h2 class="col-3"><a href="Nevsor.html">Névsor</a></h2>
+            <h2 class="col-3"><a href="Orarend.html">Órarend</a></h2>
+            <h2 class="col-3"><a href="Tanaraink.html">Tanáraink</a></h2>
+            <h2 class="col-3"><a href="Galeriank.html">Galériánk</a></h2>
+            <hr style="margin-top: 3px; margin-bottom: 40px;">
+        </div>
+
+        <div>
+            <p class="text-center text-secondary mt-40px">Üdvözlünk a 9/A osztály weboldalán :)! Ezen az oldalon
+                betekintést
+                nyerhetsz a közös képeinktől elkezdve a tanári
+                karunkig sok mindenbe. Nézz körül nyugodtan, hisz titkolnivalónk úgy sincs. Az oldalt készítette
+                Mészáros
+                Ákos
+                és Németh Dániel Zsolt, illetve a képeket az osztály szolgáltatta :).
+                Kellemes időtöltést kívánunk az oldalon! <br> Amennyiben kedvet kaptál egy rövid értékelés írásához, itt
+                azt is megteheted (milyen lett az oldal, mi hiányzik róla, stb....)</p>
+        </div>
+        
+        <div class="input">
+            <input type="text" style="width: 50%;"><button type="button" class=" btn btn-success"
+                style="margin-top: 10px;">Küldés</button> 
+        </div>
+    </div>
+    <footer>
+        <h6 style="text-align: center;">2025, Minden Jog Fentartva</h6>
+    </footer>
+</body>
+
+</html>
