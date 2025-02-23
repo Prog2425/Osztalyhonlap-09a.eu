@@ -1,0 +1,56 @@
+h2 {
+    text-align: center;
+}
+
+h1 {
+    font-style: italic;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin-bottom: 10px;
+}
+
+.nav {
+    gap: 20px;
+    text-align: center;
+}
+
+a {
+    text-decoration: dotted;
+    color: green;
+}
+
+a:hover {
+    color: black;
+    transition: 1.5s;
+}
+
+.row {
+    position: sticky;
+    top: 2;
+}
+
+input {
+    display: flex;
+    flex-direction: row;
+    margin-top: 40px;
+
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    color: green;
+    padding: 20px;
+    text-align: center;
+    margin: auto;
+    font-size: 8;
+    display: grid;
+    place-items: center;
+    width: 100%;
+}
+
+footer h6 {
+    margin: auto;
+    text-align: center;
+    width: 100%;
+    margin: 0;
+}
